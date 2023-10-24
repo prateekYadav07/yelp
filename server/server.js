@@ -7,9 +7,9 @@ const db = require('./db')
 const {query, checkSchema, validationResult, matchedData} = require('express-validator')
 
 const app = express()
-app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
+app.use(cors())
 app.use(morgan('tiny'))
 const port = process.env.PORT || 8000;
 
@@ -31,7 +31,7 @@ const getAllRestaurants = app.get('/api/v1/restaurants', async (req,res) => {
             }
         })
     } catch (error) {
-        res.status(error.status).json(error)
+        console.log(error);
     }
 
 })
@@ -67,7 +67,7 @@ app.post('/api/v1/restaurants', checkSchema(validRestaurant), async (req,res) =>
             }
         })
     } catch (error) {
-        res.status(error.status).json(error)
+        console.log(error);
     }
 })
 

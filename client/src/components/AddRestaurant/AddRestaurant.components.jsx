@@ -1,33 +1,92 @@
-import React from 'react'
+import React, { useState } from "react";
+import restaurantFindersApis from "../../apis/restaurants/restaurantFinders.apis";
+import { useRestaurantContext } from "../../provider/restaurant/restaurant.provider";
 
 const AddRestaurant = () => {
+  const { addRestaurants } = useRestaurantContext();
+  const [restaurantBody, setRestaurantBody] = useState({
+    name: "",
+    location: "",
+    price_range: "Price Range",
+  });
+  const { name, location, price_range } = restaurantBody;
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setRestaurantBody({ ...restaurantBody, [name]: value });
+  };
+
+  const handleSubmit = (event) => {
+    async function createRestaurant() {
+      try {
+        await restaurantFindersApis.post("/", restaurantBody).then((res) => {
+          addRestaurants(res.data.data.values);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    createRestaurant();
+  };
+
   return (
     <div className="container text-center">
-        <form action="">
-            <div className="row">
-                <div className="col">
-                    <input type="text" placeholder='name' className='form-control' />
-                </div>
-                <div className="col">
-                    <input type="text" placeholder='location' className='form-control' />
-                </div>
-                <div className="col">
-                    <select className="form-select" aria-label="Default select example">
-                        <option value disabled>Price Range</option>
-                        <option value="1">$</option>
-                        <option value="2">$$</option>
-                        <option value="3">$$$</option>
-                        <option value="4">$$$$</option>
-                        <option value="5">$$$$$</option>
-                    </select>
-                </div>
-                <div className="col ms-auto">
-                    <button className="btn btn-primary">Add</button>
-                </div>
-            </div>
-        </form>
+      {}
+      <div className="row">
+        <div className="col">
+          <input
+            type="text"
+            name="name"
+            value={name}
+            onChange={handleChange}
+            required
+            placeholder="restaurant name"
+            className="form-control"
+          />
+        </div>
+        <div className="col">
+          <input
+            type="text"
+            name="location"
+            value={location}
+            onChange={handleChange}
+            required
+            placeholder="restaurant location"
+            className="form-control"
+          />
+        </div>
+        <div className="col">
+          <select
+            className="form-select"
+            value={price_range}
+            name="price_range"
+            onChange={handleChange}
+            required
+            aria-label="Default select example"
+          >
+            <option defaultValue={1} disabled>
+              Price Range
+            </option>
+            <option value="1">$</option>
+            <option value="2">$$</option>
+            <option value="3">$$$</option>
+            <option value="4">$$$$</option>
+            <option value="5">$$$$$</option>
+          </select>
+        </div>
+        <div className="col ms-auto">
+          <button
+            type="button"
+            onClick={handleSubmit}
+            className="btn btn-primary"
+          >
+            Add
+          </button>
+        </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default AddRestaurant
+export default AddRestaurant;
