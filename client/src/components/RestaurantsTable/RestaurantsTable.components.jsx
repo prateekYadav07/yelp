@@ -1,6 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useRestaurantContext } from '../../provider/restaurant/restaurant.provider'
+import restaurantFindersApis from '../../apis/restaurants/restaurantFinders.apis'
 
 const RestaurantsTable = () => {
+    const {restaurants, addRestaurants} = useRestaurantContext()
+    useEffect(() => {
+        async function fetchRestaurants(){
+            try {
+                await restaurantFindersApis
+                .get("/")
+                .then((res) => {
+                    addRestaurants(res.data.data.values)
+                })
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchRestaurants()
+    }, [])
+
   return (
     <div className="list-group mt-2">
         <table className="table table-hover">

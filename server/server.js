@@ -2,10 +2,12 @@ const express = require('express');
 require('dotenv').config()
 const bodyParser = require('body-parser');
 const morgan = require('morgan')
+const cors = require('cors')
 const db = require('./db')
 const {query, checkSchema, validationResult, matchedData} = require('express-validator')
 
 const app = express()
+app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(morgan('tiny'))
