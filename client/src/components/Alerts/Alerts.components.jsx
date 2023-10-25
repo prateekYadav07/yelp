@@ -8,7 +8,7 @@ const Alerts = () => {
     setTimeout(() => {
       toggleVisible(false);
     }, 2000);
-  }, [visible]);
+  }, [toggleVisible]);
 
   return (
     <div>

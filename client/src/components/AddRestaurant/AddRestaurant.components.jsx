@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import restaurantFindersApis from "../../apis/restaurants/restaurantFinders.apis";
 import { useRestaurantContext } from "../../provider/restaurant/restaurant.provider";
+import Alerts from "../Alerts/Alerts.components";
 
 const AddRestaurant = () => {
-  const { addRestaurants } = useRestaurantContext();
+  const { addRestaurants, setAlertTypes, toggleVisible } = useRestaurantContext();
   const [restaurantBody, setRestaurantBody] = useState({
     name: "",
     location: "",
@@ -21,6 +22,11 @@ const AddRestaurant = () => {
       try {
         await restaurantFindersApis.post("/", restaurantBody).then((res) => {
           addRestaurants(res.data.data.values);
+          if(res.status===201){
+            setRestaurantBody({name:'',location:'',price_range:''})
+            setAlertTypes("success", res.data.message);
+            toggleVisible(true);
+          }
         });
       } catch (error) {
         console.log(error);
@@ -32,7 +38,6 @@ const AddRestaurant = () => {
 
   return (
     <div className="container text-center">
-      {}
       <div className="row">
         <div className="col">
           <input
