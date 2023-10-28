@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import restaurantFindersApis from "../../apis/restaurants/restaurantFinders.apis";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useRestaurantContext } from "../../provider/restaurant/restaurant.provider";
-// import Alerts from "../Alerts/Alerts.components";
+import restaurantFindersApis from "../../apis/restaurants/restaurantFinders.apis";
 
-const AddRestaurant = () => {
+const UpdateRestaurant = () => {
+  const { id } = useParams();
   const { addRestaurants, setAlertTypes, toggleVisible } = useRestaurantContext();
+  const navigate = useNavigate()
   const [restaurantBody, setRestaurantBody] = useState({
     name: "",
     location: "",
@@ -17,28 +19,41 @@ const AddRestaurant = () => {
     setRestaurantBody({ ...restaurantBody, [name]: value });
   };
 
-  const handleSubmit = (event) => {
-    async function createRestaurant() {
-      try {
-        await restaurantFindersApis.post("/", restaurantBody).then((res) => {
-          addRestaurants(res.data.data.values);
-          if(res.status===201){
-            setRestaurantBody({name:'',location:'',price_range:''})
-            setAlertTypes("success", res.data.message);
-            toggleVisible(true);
-          }
-        });
-      } catch (error) {
-        console.log(error);
-      }
+  useEffect(() => {
+    async function fetchData(){
+        await restaurantFindersApis.get(`/${id}`)
+        .then((res) => {
+            const obj = res.data.data.values[0]
+            const body = {
+                name: obj.name,
+                location: obj.location,
+                price_range: obj.price_range
+            }
+            setRestaurantBody({...restaurantBody, ...body})
+        })
     }
 
-    createRestaurant();
-  };
+    fetchData()
+  }, [id])
+
+  const handleSubmit= () =>  {
+    async function updateRestaurant(){
+        await restaurantFindersApis.put(`/${id}`, restaurantBody)
+        .then((res) => {
+            if(res.status===201){
+                navigate('/')
+                setAlertTypes("success", res.data.message)
+                toggleVisible(true)
+            }
+        })
+    }
+
+    updateRestaurant()
+  }
 
   return (
     <div className="container text-center">
-      <div className="row">
+      <div className="row mb-3">
         <div className="col">
           <input
             type="text"
@@ -50,6 +65,8 @@ const AddRestaurant = () => {
             className="form-control"
           />
         </div>
+      </div>
+      <div className="row mb-3">
         <div className="col">
           <input
             type="text"
@@ -61,6 +78,8 @@ const AddRestaurant = () => {
             className="form-control"
           />
         </div>
+      </div>
+      <div className="row mb-3">
         <div className="col">
           <select
             className="form-select"
@@ -80,18 +99,20 @@ const AddRestaurant = () => {
             <option value="5">$$$$$</option>
           </select>
         </div>
-        <div className="col ms-auto">
+      </div>
+      <div className="row">
+        <div className="col">
           <button
             type="button"
             onClick={handleSubmit}
-            className="btn btn-primary"
+            className="btn btn-primary text-left"
           >
-            Add
-          </button>
+            Update
+          </button> 
         </div>
       </div>
     </div>
   );
 };
 
-export default AddRestaurant;
+export default UpdateRestaurant;

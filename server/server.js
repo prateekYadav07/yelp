@@ -21,13 +21,13 @@ const validRestaurant = {
 
 const getAllRestaurants = app.get('/api/v1/restaurants', async (req,res) => {
     try {
-        const reuslts = await db.query('select * from yelp_restaurants;')
+        const results = await db.query('select * from yelp_restaurants;')
         res.status(200).json({
             status : 'success',
             message: 'All the restaurants retrieved',
-            rows :reuslts.rows.length,
+            rows :results.rows.length,
             data: {
-                values: reuslts.rows
+                values: results.rows
             }
         })
     } catch (error) {
@@ -38,7 +38,7 @@ const getAllRestaurants = app.get('/api/v1/restaurants', async (req,res) => {
 
 app.get('/api/v1/restaurants/:id', async (req,res) => {
     try {
-        let results = await db.query('select * from yelp_restaurants where id=$1', [req.params.id]);
+        const results = await db.query('select * from yelp_restaurants where id=$1', [req.params.id]);
         res.status(200).json({
             status : 'success',
             message : 'Restaurant found',
@@ -94,7 +94,6 @@ app.put('/api/v1/restaurants/:id',checkSchema(validRestaurant), async (req,res) 
  
 app.delete('/api/v1/restaurants/:id', async (req,res) => {
     try {
-        console.log('delete route');
         const results = await db.query('DELETE FROM yelp_restaurants WHERE id=$1',[req.params.id])
         res.status(200).json({
             status : 'success',

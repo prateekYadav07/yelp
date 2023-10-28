@@ -2,10 +2,12 @@ import React, { useEffect } from "react";
 import { useRestaurantContext } from "../../provider/restaurant/restaurant.provider";
 import restaurantFindersApis from "../../apis/restaurants/restaurantFinders.apis";
 import Alerts from "../Alerts/Alerts.components";
+import { useNavigate } from "react-router-dom";
 
 const RestaurantsTable = () => {
   const { restaurants, setRestaurants, toggleVisible, setAlertTypes } =
     useRestaurantContext();
+  const navigate = useNavigate();
   const headers = [
     "Restaurant",
     "Location",
@@ -26,7 +28,7 @@ const RestaurantsTable = () => {
       }
     }
     fetchRestaurants();
-  }, []);
+  }, [setRestaurants]);
 
   const handleDelete = async (id) => {
     try {
@@ -64,7 +66,7 @@ const RestaurantsTable = () => {
                   <td>{"$".repeat(item.price_range)}</td>
                   <td>-</td>
                   <td>
-                    <button className="btn btn-warning">Update</button>
+                    <button onClick={() => navigate (`/restaurants/${item.id}/update`)} className="btn btn-warning">Update</button>
                   </td>
                   <td>
                     <button
