@@ -30,8 +30,9 @@ const RestaurantsTable = () => {
     fetchRestaurants();
   }, [setRestaurants]);
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (e,id) => {
     try {
+      e.stopPropagation()
       const res = await restaurantFindersApis.delete(`/${id}`);
       setRestaurants(restaurants.filter((item) => item.id !== id));
       setAlertTypes("danger", res.data.message);
@@ -40,6 +41,10 @@ const RestaurantsTable = () => {
       console.log(error);
     }
   };
+
+  const handleRestaurantDetails = (id) => {
+    navigate(`restaurants/${id}`)
+  }
 
   return (
     <div className="list-group mt-2">
@@ -60,18 +65,19 @@ const RestaurantsTable = () => {
           {restaurants &&
             restaurants.map((item) => {
               return (
-                <tr key={item.id}>
+                <tr key={item.id} 
+                style={{cursor:"pointer"}} onClick={() => handleRestaurantDetails(item.id)}>
                   <td>{item.name}</td>
                   <td>{item.location}</td>
                   <td>{"$".repeat(item.price_range)}</td>
                   <td>-</td>
                   <td>
-                    <button onClick={() => navigate (`/restaurants/${item.id}/update`)} className="btn btn-warning">Update</button>
+                    <button onClick={(e) =>{e.stopPropagation();  navigate (`/restaurants/${item.id}/update`)}} className="btn btn-warning">Update</button>
                   </td>
                   <td>
                     <button
                       className="btn btn-danger"
-                      onClick={() => handleDelete(item.id)}
+                      onClick={(e) => handleDelete(e, item.id)}
                     >
                       Delete
                     </button>

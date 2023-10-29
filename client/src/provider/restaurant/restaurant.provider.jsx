@@ -7,6 +7,8 @@ const RestaurantContext = createContext({
   alert:{},
   toggleVisible: () => {},
   setAlertTypes: () => {},
+  selectedRestaurants: [],
+  setSelectedRestaurant: () => {}
 });
 
 export const useRestaurantContext = () => useContext(RestaurantContext);
@@ -18,6 +20,7 @@ const RestaurantContextProvider = ({ children }) => {
     type: "",
     message: "",
   });
+  const [selectedRestaurants, setSelectedRestaurant] = useState(null)
 
   const setAlertTypes = (type, message) =>
     setAlert({ type: type, message: message });
@@ -32,7 +35,9 @@ const RestaurantContextProvider = ({ children }) => {
         visible,
         toggleVisible,
         setAlertTypes,
-        alert
+        alert,
+        selectedRestaurants,
+        setSelectedRestaurant
       }}
     >
       {children}
