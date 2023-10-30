@@ -4,6 +4,7 @@ import { useRestaurantContext } from '../provider/restaurant/restaurant.provider
 import restaurantFindersApis from '../apis/restaurants/restaurantFinders.apis'
 import StarRating from '../components/star-rating/star-rating.components'
 import Reviews from '../components/reviews/reviews.components'
+import AddReview from '../components/addreview/addreview.components'
 
 const RestaurantDetailPage = () => {
   const {selectedRestaurants, setSelectedRestaurant} = useRestaurantContext()
@@ -26,8 +27,9 @@ const RestaurantDetailPage = () => {
 
   return (
     <div className='container'>
-      <h1>{selectedRestaurants? selectedRestaurants.name : 'Loading'}s</h1>
+      <h1 className='font-weight-light display-1 text-center'>{selectedRestaurants? selectedRestaurants.name : 'Loading'}</h1>
       <Reviews />
+      <AddReview />
     </div>
   )
 }
