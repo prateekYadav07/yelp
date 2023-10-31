@@ -15,7 +15,7 @@ const RestaurantDetailPage = () => {
         await restaurantFindersApis
         .get(`/${id}`)
         .then((res) => {
-          setSelectedRestaurant(res.data.data.values[0])
+          setSelectedRestaurant(res.data.data)
         })
       } catch (error) {
         console.log(error);
@@ -27,8 +27,8 @@ const RestaurantDetailPage = () => {
 
   return (
     <div className='container'>
-      <h1 className='font-weight-light display-1 text-center'>{selectedRestaurants? selectedRestaurants.name : 'Loading'}</h1>
-      <Reviews />
+      <h1 className='font-weight-light display-1 text-center'>{selectedRestaurants? selectedRestaurants.values[0].name : 'Loading'}</h1>
+      <Reviews reviews={selectedRestaurants ? selectedRestaurants.reviews :  []} />
       <AddReview />
     </div>
   )

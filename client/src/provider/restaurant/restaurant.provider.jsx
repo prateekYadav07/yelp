@@ -7,7 +7,7 @@ const RestaurantContext = createContext({
   alert:{},
   toggleVisible: () => {},
   setAlertTypes: () => {},
-  selectedRestaurants: [],
+  selectedRestaurants: {},
   setSelectedRestaurant: () => {}
 });
 

@@ -39,11 +39,13 @@ const getAllRestaurants = app.get('/api/v1/restaurants', async (req,res) => {
 app.get('/api/v1/restaurants/:id', async (req,res) => {
     try {
         const results = await db.query('select * from yelp_restaurants where id=$1', [req.params.id]);
+        const reviewsData  = await db.query('select * from yelp_reviews where restaurant_id=$1', [req.params.id]);
         res.status(200).json({
             status : 'success',
             message : 'Restaurant found',
             data : {
-                values: results.rows
+                values: results.rows,
+                reviews: reviewsData.rows
             }
         })
     } catch (error) {
