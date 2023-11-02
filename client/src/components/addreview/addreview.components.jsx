@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import restaurantFindersApis from "../../apis/restaurants/restaurantFinders.apis";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-const AddReview = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
+const AddReview = ({handleToggle}) => {
   const {id} = useParams()
   const [reviewState, setReviewState] = useState({
     name: "",
@@ -25,7 +23,8 @@ const AddReview = () => {
       const postReviews = async () => {
         await restaurantFindersApis.post(`/${id}/addReview`, reviewState)
         .then((res) => {
-          navigate(location.pathname, {replace: true})
+          // navigate(location.pathname, {replace: true})
+          handleToggle()
         })
       }
 
