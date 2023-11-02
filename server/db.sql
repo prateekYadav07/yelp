@@ -7,3 +7,11 @@ CREATE TABLE yelp_reviews (
 );
 
 INSERT INTO yelp_reviews (name, review, rating, restaurant_id) values ('josh', 'weird place', 1, 77);
+
+select trunc(avg(rating),1) as avg_rating from yelp_reviews where restaurant_id = 86;
+
+select * from yelp_restaurants left join (select restaurant_id, count(*), trunc(avg(rating),2) as average_rating from yelp_reviews group by restaurant_id) yelp_reviews on
+yelp_reviews.restaurant_id = yelp_restaurants.id;
+
+select * from yelp_restaurants left join (select restaurant_id, count(*), trunc(avg(rating),2) as average_rating from yelp_reviews group by restaurant_id) yelp_reviews on
+yelp_reviews.restaurant_id = yelp_restaurants.id;

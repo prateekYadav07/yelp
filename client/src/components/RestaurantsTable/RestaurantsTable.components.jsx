@@ -3,6 +3,7 @@ import { useRestaurantContext } from "../../provider/restaurant/restaurant.provi
 import restaurantFindersApis from "../../apis/restaurants/restaurantFinders.apis";
 import Alerts from "../Alerts/Alerts.components";
 import { useNavigate } from "react-router-dom";
+import AvgRating from "../avg-rating.componentes.jsx/avg-rating.components";
 
 const RestaurantsTable = () => {
   const { restaurants, setRestaurants, toggleVisible, setAlertTypes } =
@@ -73,7 +74,7 @@ const RestaurantsTable = () => {
                   <td>{item.name}</td>
                   <td>{item.location}</td>
                   <td>{"$".repeat(item.price_range)}</td>
-                  <td>-</td>
+                  <td><AvgRating avgRatings={item.average_rating} totalRatings={item.count}/></td>
                   <td>
                     <button
                       onClick={(e) => {

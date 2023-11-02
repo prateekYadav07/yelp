@@ -51,6 +51,7 @@ const AddReview = ({handleToggle}) => {
         <div className="col-4">
           <label htmlFor="rating">Rating</label>
           <select name="rating" value={rating} onChange={handleChange} id="rating" className="form-select">
+          <option defaultChecked disabled>Rating</option>
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
