@@ -5,7 +5,7 @@ import restaurantFindersApis from "../../apis/restaurants/restaurantFinders.apis
 
 const UpdateRestaurant = () => {
   const { id } = useParams();
-  const { addRestaurants, setAlertTypes, toggleVisible } = useRestaurantContext();
+  const { setAlertTypes, toggleVisible } = useRestaurantContext();
   const navigate = useNavigate()
   const [restaurantBody, setRestaurantBody] = useState({
     name: "",

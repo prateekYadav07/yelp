@@ -6,4 +6,4 @@ CREATE TABLE yelp_reviews (
     rating INT check(rating>=1 and rating<=5)
 );
 
-INSERT INTO reviews (name, review, rating, restaurant_id) values ('josh', 'weird place', 1, 77);
+INSERT INTO yelp_reviews (name, review, rating, restaurant_id) values ('josh', 'weird place', 1, 77);

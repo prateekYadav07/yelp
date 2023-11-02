@@ -15,8 +15,14 @@ const port = process.env.PORT || 8000;
 
 const validRestaurant = {
     name: {notEmpty:true, errorMessage:{name: 'name can not be empty'}},
-    location : {notEmpty:true, errorMessage:{name: 'location can not be empty'}},
-    price_range : {notEmpty:true, errorMessage:{name: 'price range can not be empty'}}
+    location : {notEmpty:true, errorMessage:{location: 'location can not be empty'}},
+    price_range : {notEmpty:true, errorMessage:{price_range: 'price range can not be empty'}}
+}
+
+const validReview = {
+    name: {notEmpty:true, errorMessage:{name:'reviewer must provide their name'}},
+    rating: {notEmpty:true, errorMessage:{rating:'rating cannot be empty'}},
+    review: {notEmpty:true, errorMessage:{review:'review cannot be empty'}}
 }
 
 const getAllRestaurants = app.get('/api/v1/restaurants', async (req,res) => {
@@ -94,7 +100,7 @@ app.put('/api/v1/restaurants/:id',checkSchema(validRestaurant), async (req,res) 
     }
 })
  
-app.delete('/api/v1/restaurants/:id', async (req,res) => {
+app.delete('/api/v1/restaurants/:id' ,async (req,res) => {
     try {
         const results = await db.query('DELETE FROM yelp_restaurants WHERE id=$1',[req.params.id])
         res.status(200).json({
@@ -106,6 +112,26 @@ app.delete('/api/v1/restaurants/:id', async (req,res) => {
         })
     } catch (error) {
         res.status(error.status).json(error)
+    }
+})
+
+app.post('/api/v1/restaurants/:id/addReview',checkSchema(validReview) ,async (req,res) => {
+    try {
+        const result = validationResult(req)
+        if(!result.isEmpty())  
+            return res.status(400).send({errors: result.array()})
+        const body = matchedData(req)
+        const values = [req.params.id, body.name, body.rating, body.review]
+        const results = await db.query('INSERT INTO yelp_reviews (restaurant_id, name, rating, review) values($1,$2,$3,$4) returning *', values)
+        res.status(201).json({
+            status : 'success',
+            message : 'review added',
+            data:{
+                reviews: results.rows
+            }
+        })
+    } catch (error) {
+        console.log(error);
     }
 })
 

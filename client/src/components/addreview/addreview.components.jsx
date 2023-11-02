@@ -1,6 +1,11 @@
 import React, { useState } from "react";
+import restaurantFindersApis from "../../apis/restaurants/restaurantFinders.apis";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const AddReview = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const {id} = useParams()
   const [reviewState, setReviewState] = useState({
     name: "",
     rating: "",
@@ -12,6 +17,22 @@ const AddReview = () => {
   const handleChange = (e) => {
     const {name, value} = e.target
     setReviewState({...reviewState, [name] : value})
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    try {
+      const postReviews = async () => {
+        await restaurantFindersApis.post(`/${id}/addReview`, reviewState)
+        .then((res) => {
+          navigate(location.pathname, {replace: true})
+        })
+      }
+
+      postReviews()
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -55,7 +76,7 @@ const AddReview = () => {
       </div>
       <div className="row mb-2">
         <div className="col-2">
-          <button className="btn btn-primary">Submit</button>
+          <button className="btn btn-primary" onClick={(e) => handleSubmit(e)}>Submit</button>
         </div>
       </div>
     </div>
